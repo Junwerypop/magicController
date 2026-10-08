@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>StickC Motion Controller Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>STICKC MOTION CONTROLLER TEST</h1>
+
+  <div class="row">
+    <button id="connectBtn">Connect Controller</button>
+    <button id="disconnectBtn" disabled>Disconnect</button>
+    <span>Connection: <strong id="status" class="off">Disconnected</strong></span>
+  </div>
+  <p id="warning" class="warn"></p>
+
+  <h2>LIVE SENSOR DATA (raw)</h2>
+  <div class="panels">
+    <div class="panel">
+      <h3>Accelerometer (g)</h3>
+      <p>X: <span id="ax">0.00</span></p>
+      <p>Y: <span id="ay">0.00</span></p>
+      <p>Z: <span id="az">0.00</span></p>
+    </div>
+    <div class="panel">
+      <h3>Gyroscope (deg/s)</h3>
+      <p>X: <span id="gx">0.00</span></p>
+      <p>Y: <span id="gy">0.00</span></p>
+      <p>Z: <span id="gz">0.00</span></p>
+    </div>
+    <div class="panel">
+      <h3>Debug</h3>
+      <p>Data rate: <span id="rate">0</span> Hz</p>
+      <p>Bad lines: <span id="bad">0</span></p>
+    </div>
+  </div>
+
+  <h2>MOTION VISUALIZER</h2>
+  <div class="row">
+    <span>Model:</span>
+    <button class="modelBtn active" data-model="box">Box</button>
+    <button class="modelBtn" data-model="staff">คทา</button>
+    <button class="modelBtn" data-model="sword">ดาบ</button>
+  </div>
+  <div class="row" style="margin-top:8px">
+    <button id="pauseBtn">Pause Tracking</button>
+    <button id="resetBtn">Reset</button>
+    <button id="gyroCalBtn">Calibrate Gyro (วางนิ่ง)</button>
+    <button id="detectAxisBtn">ตรวจแกนดาบ (ปลายชี้ขึ้น)</button>
+    <button id="setStraightBtn">ตั้งเป็นท่าตรง</button>
+  </div>
+  <p class="hint">
+    Tracking: <strong id="trackStatus">-</strong> |
+    <p class="hint" id="qDebug"></p>
+    แกนดาบ: <strong id="axisLabel">+Y (ค่าเริ่มต้น)</strong>
+  </p>
+  <div id="visualizer"></div>
+  <p class="hint">ลากเมาส์หมุนกล้อง / scroll ซูม
+    (แกน: <span style="color:#f55">X แดง</span>,
+    <span style="color:#5f5">Y เขียว (ขึ้น)</span>,
+    <span style="color:#59f">Z น้ำเงิน</span>)</p>
+
+  <h2>CALCULATED ORIENTATION (เทียบกับท่าตรง)</h2>
+  <div class="panels">
+    <div class="panel">
+      <h3>Rotation around device axes (deg)</h3>
+      <p>ROLL  (แกน X): <span id="roll">0</span>°</p>
+      <p>PITCH (แกน Y): <span id="pitch">0</span>°</p>
+      <p>YAW   (แกน Z): <span id="yaw">0</span>°</p>
+    </div>
+  </div>
+  <p class="warn">
+    Yaw ได้จาก gyro อย่างเดียว (StickC ไม่มี magnetometer) จึงยัง drift ช้าๆ ได้
+    แม้ลดลงมากแล้ว ถ้าเพี้ยนให้กด "ตั้งเป็นท่าตรง" ใหม่
+  </p>
+
+  <!-- ลำดับสำคัญ: p5 ก่อน แล้วค่อยไฟล์อื่น -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  <script src="motion.js"></script>
+  <script src="serial.js"></script>
+  <script src="sketch.js"></script>
+</body>
+</html>

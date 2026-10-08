@@ -1,0 +1,17 @@
+{
+  "name": "stickc-motion-controller",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npx serve web -l 3000"
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "p5": "^2.3.4"
+  }
+}
