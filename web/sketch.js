@@ -1,5 +1,5 @@
 // web/sketch.js
-// วาด model ตั้งตรง ปลายชี้ขึ้น หมุนตาม quaternion จาก motion.js
+// หมุน model ตาม orientation จาก IMU แต่ไม่เลื่อนตำแหน่งจาก accelerometer
 
 const CANVAS_HEIGHT = 420;
 let currentModel = "box";   // "box" | "staff" | "sword"
@@ -8,6 +8,7 @@ function setup() {
   const holder = document.getElementById("visualizer");
   const canvas = createCanvas(holder.clientWidth, CANVAS_HEIGHT, WEBGL);
   canvas.parent(holder);
+  resetCameraView();
 
   document.querySelectorAll(".modelBtn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -18,9 +19,16 @@ function setup() {
   });
 }
 
+// Stable oblique default view; mouse orbit remains available after startup.
+function resetCameraView() {
+  camera(360, -260, 620, 0, 0, 0, 0, 1, 0);
+  perspective(PI / 3, width / height, 1, 3000);
+}
+
 function windowResized() {
   const holder = document.getElementById("visualizer");
   resizeCanvas(holder.clientWidth, CANVAS_HEIGHT);
+  resetCameraView();
 }
 
 function draw() {
@@ -33,11 +41,14 @@ function draw() {
 
   const r = getDisplayRotation();
   push();
+  // Keep translation disabled; preserve three-axis orientation tracking.
   rotate(r.angle, r.axis);
   drawModel();
+  drawLocalAxes(45);
   pop();
 
   updateOrientationDisplay();
+  updateMovementDisplay();
 }
 
 function drawModel() {
@@ -74,4 +85,11 @@ function drawAxes(len) {
   stroke(255, 80, 80);  line(0, 0, 0, len, 0, 0);     // X แดง (ขวา)
   stroke(80, 255, 80);  line(0, 0, 0, 0, -len, 0);    // Y เขียว (ขึ้น)
   stroke(80, 150, 255); line(0, 0, 0, 0, 0, len);     // Z น้ำเงิน (เข้าหาเรา)
+}
+
+function drawLocalAxes(len) {
+  strokeWeight(1.5);
+  stroke(255, 100, 100);  line(-len, 0, 0, len, 0, 0);
+  stroke(100, 255, 100);  line(0, len, 0, 0, -len, 0);
+  stroke(100, 170, 255);  line(0, 0, -len, 0, 0, len);
 }

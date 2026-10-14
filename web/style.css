@@ -2,15 +2,15 @@ body { font-family: monospace; background: #111; color: #eee; margin: 24px; }
 h1 { font-size: 20px; }
 h2 { font-size: 16px; margin-top: 28px; border-top: 1px solid #333; padding-top: 16px; }
 h3 { font-size: 14px; margin: 0 0 8px; color: #aaa; }
-.row { display: flex; gap: 12px; align-items: center; }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 button { padding: 8px 14px; font-family: inherit; cursor: pointer; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 .panels { display: flex; gap: 16px; flex-wrap: wrap; }
-.panel { background: #1c1c1c; border: 1px solid #333; padding: 12px 16px; min-width: 180px; }
+.panel { background: #1c1c1c; border: 1px solid #333; padding: 12px 16px; min-width: 180px; max-width: 100%; overflow-wrap: anywhere; }
 .panel p { margin: 4px 0; }
 .off { color: #f66; }
 .on  { color: #6f6; }
 .warn { color: #fc6; }
-#visualizer { border: 1px solid #333; background: #000; height: 420px; }
+#visualizer { border: 1px solid #333; background: #000; height: 420px; max-width: 100%; }
 #visualizer canvas { display: block; }
 .hint { color: #888; font-size: 12px; }

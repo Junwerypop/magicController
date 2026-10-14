@@ -1,17 +1,14 @@
 {
-  "name": "stickc-motion-controller",
+  "name": "magic-wand-controller",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "npx serve web -l 3000"
+    "start": "node dev-server.js"
   },
   "description": "",
   "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "p5": "^2.3.4"
-  }
+  "type": "commonjs"
 }

@@ -1,0 +1,39 @@
+--- /home/claude/ble_gamepad.h.orig	2026-10-14 07:25:52.285828760 +0000
++++ ble_gamepad.h	2026-10-14 07:25:52.296902704 +0000
+@@ -29,7 +29,7 @@
+     hid_->setBatteryLevel(100);
+     hid_->startServices();
+     Serial.println("# HID input report configured: characteristic 0x2A4D READ|NOTIFY; Report Reference 0x2908={ID 1, Input 1}; Bluedroid CCCD 0x2902 added by inputReport(1)");
+-    Serial.println("# HID descriptor payload: Report ID 1 + X/Y/Z signed 16-bit LE + Button 1 bit + 7 padding bits = 8 bytes total");
++    Serial.println("# HID descriptor payload: X/Y/Z signed 16-bit LE + Button 1 bit + 7 padding bits = 7-byte value (Report ID 1 is in 0x2908, not in the value)");
+ 
+     BLEAdvertising* advertising = BLEDevice::getAdvertising();
+     advertising->setAppearance(0x03C4); // HID Gamepad
+@@ -47,7 +47,7 @@
+     if (reportButtonByte != nullptr) *reportButtonByte = 0xFF; // No report was formed.
+     if (!connected_) { notifyStats_.skippedDisconnected++; return false; }
+     if (report_ == nullptr) { notifyStats_.skippedMissingReport++; return false; }
+-    GamepadReport report = {1, x, y, z, static_cast<uint8_t>(buttonDown ? 0x01 : 0x00)};
++    GamepadReport report = {x, y, z, static_cast<uint8_t>(buttonDown ? 0x01 : 0x00)};
+     if (logPayload) {
+       const uint8_t* bytes = reinterpret_cast<const uint8_t*>(&report);
+       Serial.printf("# HID TEST actual_payload len=%u bytes=", static_cast<unsigned>(sizeof(report)));
+@@ -103,8 +103,9 @@
+     uint32_t skippedMissingReport = 0;
+   };
+ 
++  // BLE HID (HOGP): the Report ID lives in the Report Reference descriptor (0x2908),
++  // not in the characteristic value. The value must be exactly the 7 report bytes.
+   struct __attribute__((packed)) GamepadReport {
+-    uint8_t reportId;
+     int16_t x;
+     int16_t y;
+     int16_t z;
+@@ -154,6 +155,7 @@
+     bool onConfirmPIN(uint32_t) override { return true; }
+   };
+ 
++  static_assert(sizeof(GamepadReport) == 7, "HID report value must be 7 bytes (no Report ID)");
+   static const uint8_t kReportDescriptor[54];
+   BLEServer* server_ = nullptr;
+   BLEHIDDevice* hid_ = nullptr;
